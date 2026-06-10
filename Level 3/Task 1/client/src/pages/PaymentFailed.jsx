@@ -1,19 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Pizza, XCircle } from 'lucide-react';
+import { XCircle } from 'lucide-react';
+import Navbar from '../components/Navbar';
 
 const PaymentFailed = () => {
   const { state } = useLocation();
 
   return (
     <>
-      <nav className="navbar">
-        <Link to="/" className="navbar-brand">
-          <span className="brand-mark">
-            <Pizza size={24} />
-          </span>
-          <span>PizzaDelivery</span>
-        </Link>
-      </nav>
+      <Navbar />
 
       <main className="payment-result-page">
         <section className="payment-result-card failed glass-panel">

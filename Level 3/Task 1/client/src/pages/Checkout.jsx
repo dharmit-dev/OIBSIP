@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
-import { CreditCard, MapPin, Pizza, ShieldCheck } from 'lucide-react';
+import { CreditCard, MapPin, ShieldCheck } from 'lucide-react';
 import { clearCart } from '../features/cart/cartSlice';
 import {
   createOrder,
@@ -10,6 +10,7 @@ import {
   markPaymentFailed,
   verifyPayment,
 } from '../features/orders/orderSlice';
+import Navbar from '../components/Navbar';
 
 const loadRazorpayScript = () => new Promise((resolve) => {
   if (window.Razorpay) {
@@ -38,7 +39,7 @@ const Checkout = () => {
   const [shippingAddress, setShippingAddress] = useState(initialAddress);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { items, totalAmount, totalQuantity } = useSelector((state) => state.cart);
+  const { items, totalAmount } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
   const { isLoading, isPaying } = useSelector((state) => state.orders);
 
@@ -131,7 +132,7 @@ const Checkout = () => {
           contact: shippingAddress.phone,
         },
         theme: {
-          color: '#FF5E3A',
+          color: '#6D28D9',
         },
         handler: async (response) => {
           try {
@@ -174,18 +175,7 @@ const Checkout = () => {
 
   return (
     <>
-      <nav className="navbar">
-        <Link to="/" className="navbar-brand">
-          <span className="brand-mark">
-            <Pizza size={24} />
-          </span>
-          <span>PizzaDelivery</span>
-        </Link>
-        <div className="navbar-nav">
-          <Link to="/cart" className="nav-link">Cart ({totalQuantity})</Link>
-          <Link to="/orders" className="nav-link">My Orders</Link>
-        </div>
-      </nav>
+      <Navbar />
 
       <main className="checkout-page">
         <section className="checkout-header glass-panel">

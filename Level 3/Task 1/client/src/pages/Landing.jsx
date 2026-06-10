@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout, reset } from '../features/auth/authSlice';
-import { ArrowRight, Clock3, Flame, Pizza, Quote, ShieldCheck, ShoppingCart, Sparkles, Star, Truck } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { ArrowRight, Clock3, Flame, Quote, ShieldCheck, Sparkles, Star, Truck } from 'lucide-react';
+import Navbar from '../components/Navbar';
 
 const featuredPizzas = [
   {
@@ -51,44 +51,10 @@ const testimonials = [
 
 const Landing = () => {
   const { user } = useSelector((state) => state.auth);
-  const { totalQuantity } = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
-
-  const onLogout = () => {
-    dispatch(logout());
-    dispatch(reset());
-  };
 
   return (
     <>
-      <nav className="navbar">
-        <Link to="/" className="navbar-brand">
-          <span className="brand-mark">
-            <Pizza size={24} />
-          </span>
-          <span>PizzaDelivery</span>
-        </Link>
-        <div className="navbar-nav">
-          <Link to="/menu" className="nav-link">Menu</Link>
-          <Link to="/builder" className="nav-link">Builder</Link>
-          {user?.role === 'admin' && <Link to="/admin" className="nav-link">Admin</Link>}
-          <Link to="/cart" className="nav-link">
-            <ShoppingCart size={16} />
-            Cart ({totalQuantity})
-          </Link>
-          {user ? (
-            <>
-              <span className="nav-greeting">Hello, {user.name}</span>
-              <button className="nav-action secondary" onClick={onLogout}>Logout</button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="nav-link">Login</Link>
-              <Link to="/register" className="nav-action">Sign Up</Link>
-            </>
-          )}
-        </div>
-      </nav>
+      <Navbar />
 
       <main className="landing-page">
         <section className="hero">

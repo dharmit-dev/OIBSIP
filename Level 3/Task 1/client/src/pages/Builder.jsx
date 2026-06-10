@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
-import { ArrowRight, Check, ChevronLeft, Pizza, ShoppingCart, Sparkles } from 'lucide-react';
+import { ArrowRight, Check, ChevronLeft, ShoppingCart, Sparkles } from 'lucide-react';
 import customPizzaService from '../features/customPizza/customPizzaService';
 import { addCustomPizzaToCart } from '../features/cart/cartSlice';
+import Navbar from '../components/Navbar';
 
 const steps = [
   { key: 'base', title: 'Choose your base', type: 'single', required: true, group: 'bases' },
@@ -39,7 +40,6 @@ const Builder = () => {
   const [loadError, setLoadError] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { totalQuantity } = useSelector((state) => state.cart);
 
   useEffect(() => {
     let isMounted = true;
@@ -146,18 +146,7 @@ const Builder = () => {
 
   return (
     <>
-      <nav className="navbar">
-        <Link to="/" className="navbar-brand">
-          <span className="brand-mark">
-            <Pizza size={24} />
-          </span>
-          <span>PizzaDelivery</span>
-        </Link>
-        <div className="navbar-nav">
-          <Link to="/menu" className="nav-link">Menu</Link>
-          <Link to="/cart" className="nav-link">Cart ({totalQuantity})</Link>
-        </div>
-      </nav>
+      <Navbar />
 
       <main className="builder-page">
         <section className="builder-hero glass-panel">

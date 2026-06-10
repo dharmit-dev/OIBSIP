@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
-import { CheckCircle2, Pizza } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
+import Navbar from '../components/Navbar';
 
 const PaymentSuccess = () => {
   const { state } = useLocation();
@@ -7,14 +8,7 @@ const PaymentSuccess = () => {
 
   return (
     <>
-      <nav className="navbar">
-        <Link to="/" className="navbar-brand">
-          <span className="brand-mark">
-            <Pizza size={24} />
-          </span>
-          <span>PizzaDelivery</span>
-        </Link>
-      </nav>
+      <Navbar />
 
       <main className="payment-result-page">
         <section className="payment-result-card success glass-panel">

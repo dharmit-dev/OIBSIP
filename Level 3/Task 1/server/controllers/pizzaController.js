@@ -2,11 +2,23 @@ const asyncHandler = require('express-async-handler');
 const Pizza = require('../models/pizzaModel');
 
 const getLowestPrice = (pizza) => {
-  if (!pizza.sizes || pizza.sizes.length === 0) {
-    return 0;
+  // New schema
+  if (pizza.sizes && pizza.sizes.length > 0) {
+    return Math.min(...pizza.sizes.map((size) => size.price));
   }
 
-  return Math.min(...pizza.sizes.map((size) => size.price));
+  // Legacy schema support
+  if (pizza.prices) {
+    const prices = Object.values(pizza.prices)
+      .map(Number)
+      .filter((price) => !Number.isNaN(price));
+
+    if (prices.length > 0) {
+      return Math.min(...prices);
+    }
+  }
+
+  return 0;
 };
 
 // @desc    Get pizzas with search and filters
@@ -28,7 +40,8 @@ const getPizzas = asyncHandler(async (req, res) => {
     query.$text = { $search: search };
   }
 
-  if (category) {
+  // FIX: Ignore "all" category
+  if (category && category !== 'all') {
     query.category = category;
   }
 
@@ -57,6 +70,9 @@ const getPizzas = asyncHandler(async (req, res) => {
   const pizzas = await Pizza.find(query)
     .populate('inventoryItems.item', 'name unit quantity lowStockThreshold')
     .sort(sortOptions[sort] || sortOptions.name);
+
+  console.log('Pizza Query:', query);
+  console.log('Pizza Count:', pizzas.length);
 
   res.status(200).json({
     success: true,

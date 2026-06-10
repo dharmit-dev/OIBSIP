@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
-import { Clock3, Filter, Pizza, Search, ShoppingCart, SlidersHorizontal, Sparkles, Star, XCircle } from 'lucide-react';
+import { Clock3, Filter, Pizza, Search, SlidersHorizontal, Sparkles, Star, XCircle } from 'lucide-react';
 import { fetchPizzas, resetPizzaFilters, setPizzaFilters } from '../features/pizzas/pizzaSlice';
 import { addPizzaToCart } from '../features/cart/cartSlice';
+import Navbar from '../components/Navbar';
 
 const skeletonCards = Array.from({ length: 6 }, (_, index) => index);
 
@@ -13,7 +14,6 @@ const Menu = () => {
   const navigate = useNavigate();
   const { pizzas, count, filters, isLoading, isError, message } = useSelector((state) => state.pizzas);
   const { user } = useSelector((state) => state.auth);
-  const { totalQuantity } = useSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(fetchPizzas(filters));
@@ -34,31 +34,10 @@ const Menu = () => {
     dispatch(addPizzaToCart(pizza));
     toast.success(`${pizza.name} added to cart`);
   };
-
+  // console.log("Pizzas:", pizzas.length, pizzas);
   return (
     <>
-      <nav className="navbar">
-        <Link to="/" className="navbar-brand">
-          <span className="brand-mark">
-            <Pizza size={24} />
-          </span>
-          <span>PizzaDelivery</span>
-        </Link>
-        <div className="navbar-nav">
-          <Link to="/" className="nav-link">Home</Link>
-          <Link to="/builder" className="nav-link">Builder</Link>
-          {user?.role === 'admin' && <Link to="/admin" className="nav-link">Admin</Link>}
-          <Link to="/cart" className="nav-link">
-            <ShoppingCart size={16} />
-            Cart ({totalQuantity})
-          </Link>
-          {user ? (
-            <span className="nav-greeting">Hello, {user.name}</span>
-          ) : (
-            <Link to="/login" className="nav-link">Login</Link>
-          )}
-        </div>
-      </nav>
+      <Navbar />
 
       <main className="menu-page">
         <section className="menu-header glass-panel">
@@ -200,7 +179,14 @@ const Menu = () => {
                     ))}
                   </div>
                   <div className="pizza-card-footer">
-                    <strong>From Rs {pizza.startingPrice}</strong>
+                    <strong>
+                      From Rs {
+                        pizza.startingPrice ||
+                        pizza.sizes?.[0]?.price ||
+                        pizza.prices?.small ||
+                        0
+                      }
+                    </strong>
                     <button className="btn" type="button" disabled={!pizza.isAvailable} onClick={() => onAddPizza(pizza)}>
                       Add
                     </button>

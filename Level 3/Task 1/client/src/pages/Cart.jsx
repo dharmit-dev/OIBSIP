@@ -7,6 +7,7 @@ import {
   increaseQuantity,
   removeFromCart,
 } from '../features/cart/cartSlice';
+import Navbar from '../components/Navbar';
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -14,19 +15,7 @@ const Cart = () => {
 
   return (
     <>
-      <nav className="navbar">
-        <Link to="/" className="navbar-brand">
-          <span className="brand-mark">
-            <Pizza size={24} />
-          </span>
-          <span>PizzaDelivery</span>
-        </Link>
-        <div className="navbar-nav">
-          <Link to="/menu" className="nav-link">Menu</Link>
-          <Link to="/builder" className="nav-link">Builder</Link>
-          <Link to="/orders" className="nav-link">My Orders</Link>
-        </div>
-      </nav>
+      <Navbar />
 
       <main className="cart-page">
         <section className="cart-header glass-panel">

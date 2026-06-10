@@ -20,6 +20,14 @@ const metricIcons = {
   customPizzaOrders: Boxes,
 };
 
+const statusLabels = [
+  ['pending', 'Pending', 'pendingOrders'],
+  ['preparing', 'Preparing', 'preparingOrders'],
+  ['confirmed', 'Confirmed', 'confirmedOrders'],
+  ['delivered', 'Delivered', 'deliveredOrders'],
+  ['cancelled', 'Cancelled', 'cancelledOrders'],
+];
+
 const AdminDashboard = () => {
   const dispatch = useDispatch();
 
@@ -32,6 +40,8 @@ const AdminDashboard = () => {
       totalPizzas: 0,
       customPizzaOrders: 0,
       pendingOrders: 0,
+      preparingOrders: 0,
+      confirmedOrders: 0,
       deliveredOrders: 0,
       cancelledOrders: 0,
       recentOrders: [],
@@ -57,6 +67,18 @@ const AdminDashboard = () => {
       analytics?.customPizzaOrders || 0,
     ],
   ];
+
+  const recentStatusCounts = (analytics?.recentOrders || []).reduce((counts, order) => {
+    const status = order.orderStatus === 'placed' ? 'pending' : order.orderStatus;
+    counts[status] = (counts[status] || 0) + 1;
+    return counts;
+  }, {});
+
+  const orderStats = statusLabels.map(([status, label, analyticsKey]) => ({
+    status,
+    label,
+    count: analytics?.[analyticsKey] ?? recentStatusCounts[status] ?? 0,
+  }));
 
   return (
     <AdminShell>
@@ -102,39 +124,13 @@ const AdminDashboard = () => {
             <article className="admin-panel glass-panel">
               <h2>Order Stats</h2>
 
-              <div className="mini-chart">
-                <span
-                  style={{
-                    height: `${Math.max(
-                      analytics?.pendingOrders || 0,
-                      1
-                    ) * 18}px`,
-                  }}
-                >
-                  Pending
-                </span>
-
-                <span
-                  style={{
-                    height: `${Math.max(
-                      analytics?.deliveredOrders || 0,
-                      1
-                    ) * 18}px`,
-                  }}
-                >
-                  Delivered
-                </span>
-
-                <span
-                  style={{
-                    height: `${Math.max(
-                      analytics?.cancelledOrders || 0,
-                      1
-                    ) * 18}px`,
-                  }}
-                >
-                  Cancelled
-                </span>
+              <div className="admin-status-grid">
+                {orderStats.map((stat) => (
+                  <div className={`admin-status-card order-${stat.status}`} key={stat.status}>
+                    <span>{stat.label}</span>
+                    <strong>{stat.count}</strong>
+                  </div>
+                ))}
               </div>
             </article>
 

@@ -6,7 +6,7 @@ const initialFilters = {
   category: 'all',
   minPrice: '',
   maxPrice: '',
-  isAvailable: 'true',
+  isAvailable: '', // changed from 'true'
   sort: 'name',
 };
 
@@ -23,8 +23,15 @@ export const fetchPizzas = createAsyncThunk('pizzas/fetchAll', async (filters, t
   try {
     return await pizzaService.getPizzas(filters);
   } catch (error) {
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-    return thunkAPI.rejectWithValue(message);
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+
+    ```
+return thunkAPI.rejectWithValue(message);
+```
+
   }
 });
 

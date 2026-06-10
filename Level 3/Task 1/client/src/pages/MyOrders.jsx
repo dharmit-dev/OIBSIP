@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Clock3, PackageCheck, Pizza, ReceiptText } from 'lucide-react';
+import { Clock3, PackageCheck, ReceiptText } from 'lucide-react';
 import { fetchMyOrders } from '../features/orders/orderSlice';
+import Navbar from '../components/Navbar';
 
 const statusSteps = ['placed', 'confirmed', 'preparing', 'out_for_delivery', 'delivered'];
 
@@ -16,18 +17,7 @@ const MyOrders = () => {
 
   return (
     <>
-      <nav className="navbar">
-        <Link to="/" className="navbar-brand">
-          <span className="brand-mark">
-            <Pizza size={24} />
-          </span>
-          <span>PizzaDelivery</span>
-        </Link>
-        <div className="navbar-nav">
-          <Link to="/menu" className="nav-link">Menu</Link>
-          <Link to="/cart" className="nav-link">Cart</Link>
-        </div>
-      </nav>
+      <Navbar />
 
       <main className="orders-page">
         <section className="orders-header glass-panel">
